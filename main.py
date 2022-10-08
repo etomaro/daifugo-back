@@ -8,6 +8,7 @@ app = FastAPI()
 
 origins = [
     "http://localhost:3000",
+    "https://daifugo-169cb.web.app/"
 ]
 
 app.add_middleware(
