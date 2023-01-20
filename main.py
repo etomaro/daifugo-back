@@ -151,6 +151,7 @@ def Play(play: Play):
 
     next_player_id, next_actionable_cards, game_done, game_info, settings = board.move(player_id, action_card)
 
+    print('ok...')
     # react側ではlast_cardが1枚の場合でも配列にしているため
     if game_info["last_card"] == "":
         game_info["last_card"] = []
@@ -159,13 +160,18 @@ def Play(play: Play):
     
     # 次のプレイヤーがCPUの場合、次のアクションを取得
     next_cpu_action = []
+    print('C')
 
     if game_done == False:
         next_front_type = players_back_to_front[next_player_id]
         next_type = settings[next_front_type]
         if next_type == "auto":
             random_player = RandomPlayer()
+            print('bbb')
+            print(next_actionable_cards)
+            print(random_player.get_action_card(next_actionable_cards))
             next_cpu_action.append(random_player.get_action_card(next_actionable_cards))
+            print('ddd')
 
     print("next_cpu_action: ", next_cpu_action)
 
