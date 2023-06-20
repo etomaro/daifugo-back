@@ -44,6 +44,7 @@ class Board:
             last_card: LAST_CARDS,
             last_player: LAST_PLAYER,
             count: COUNT,
+            turn: TURN,
             revolution: REVOLUTION,
             end_player: END_PLAYER,
             players_order: PLAYERS_ORDER,
@@ -53,23 +54,24 @@ class Board:
             id4_cards: ID4_CARDS
         }
         settings: {
-            numPlayer: 4,
-            autoSpeed: 0.5,
-            isBan: true,
-            isAvility: false,
-            isStairs: true
-            isReturnSpade3: false
+            num_player: 4,
+            auto_speed: 0.5,
+            is_ban: true,
+            is_avility: false,
+            is_stairs: true
+            is_return_spade3: false
         }
         """
         self.cards = CARDS.copy()
-        if settings["numPlayer"] == 2:
+        if settings["num_player"] == 2:
             self.players = PLAYERS_TWO.copy()
-        elif settings["numPlayer"] == 3:
+        elif settings["num_player"] == 3:
             self.players = PLAYERS_THREE.copy()
-        elif settings["numPlayer"] == 4:
+        elif settings["num_player"] == 4:
             self.players = PLAYERS_FOUR.copy()
         else:
-            print('プレイ人数が2-4人ではありません')
+            print(type(settings["num_player"]))
+            print('プレイ人数が2-4人ではありません\nsettings["num_player"]: ', settings["num_player"])
             raise Exception
 
         self.settings = settings
@@ -85,13 +87,13 @@ class Board:
             self.totalAction = 1  # 何回アクションしたか
             self.revolution = False
             self.players_order = self.make_players_order()
-            if settings["numPlayer"] == 2:
+            if settings["num_player"] == 2:
                 self.id1_cards, self.id2_cards = self.delivery_card()
                 self.end_player = PLAYERS_END_TWO.copy()
-            elif settings["numPlayer"] == 3:
+            elif settings["num_player"] == 3:
                 self.id1_cards, self.id2_cards, self.id3_cards = self.delivery_card()
                 self.end_player = PLAYERS_END_THREE.copy()
-            elif settings["numPlayer"] == 4:
+            elif settings["num_player"] == 4:
                 self.id1_cards, self.id2_cards, self.id3_cards, self.id4_cards = self.delivery_card()
                 self.end_player = PLAYERS_END_FOUR.copy()
             else:
@@ -104,18 +106,19 @@ class Board:
             self.last_card = game_info["last_card"]
             self.last_player = game_info["last_player"]
             self.count = game_info["count"]
-            self.count = game_info["turn"]
+            self.turn = game_info["turn"]
+            self.totalAction = game_info["totalAction"]
             self.revolution = game_info["revolution"]
             self.end_player = game_info["end_player"]
             self.players_order = game_info["players_order"]
-            if settings["numPlayer"] == 2:
+            if settings["num_player"] == 2:
                 self.id1_cards = game_info["id1_cards"]
                 self.id2_cards = game_info["id2_cards"]
-            elif settings["numPlayer"] == 3:
+            elif settings["num_player"] == 3:
                 self.id1_cards = game_info["id1_cards"]
                 self.id2_cards = game_info["id2_cards"]
                 self.id3_cards = game_info["id3_cards"]
-            elif settings["numPlayer"] == 4:
+            elif settings["num_player"] == 4:
                 self.id1_cards = game_info["id1_cards"]
                 self.id2_cards = game_info["id2_cards"]
                 self.id3_cards = game_info["id3_cards"]
@@ -124,11 +127,11 @@ class Board:
                 print('プレイ人数が2-4人ではありません')
                 raise Exception
 
-        if settings["numPlayer"] == 2:
+        if settings["num_player"] == 2:
             self.id_card_dict = {"id1": self.id1_cards, "id2": self.id2_cards}
-        elif settings["numPlayer"] == 3:
+        elif settings["num_player"] == 3:
             self.id_card_dict = {"id1": self.id1_cards, "id2": self.id2_cards, "id3": self.id3_cards}
-        elif settings["numPlayer"] == 4:
+        elif settings["num_player"] == 4:
             self.id_card_dict = {"id1": self.id1_cards, "id2": self.id2_cards, "id3": self.id3_cards, "id4": self.id4_cards}
         else:
             print('プレイ人数が2-4人ではありません')
@@ -154,12 +157,12 @@ class Board:
 
         # ------ルール説明---------
         print(f"""-------------------ルール説明-------------------
-プレイ人数: {settings["numPlayer"]}
-コンピューターの速度: {settings["autoSpeed"]}秒
-禁止上がり: {"あり" if settings["isBan"] else "なし"}
-特殊カード: {"あり" if settings["isAvility"] else "なし"}
-階段: {"あり" if settings["isStairs"] else "なし"}
-スぺ3返し: {"あり" if settings["isReturnSpade3"] else "なし"}
+プレイ人数: {settings["num_player"]}
+コンピューターの速度: {settings["auto_speed"]}秒
+禁止上がり: {"あり" if settings["is_ban"] else "なし"}
+特殊カード: {"あり" if settings["is_avility"] else "なし"}
+階段: {"あり" if settings["is_stairs"] else "なし"}
+スぺ3返し: {"あり" if settings["is_return_spade3"] else "なし"}
 ------------------------------------------------""")
 
         # ------プレイ内容出力------
@@ -192,14 +195,14 @@ class Board:
         game_info["revolution"] = self.revolution
         game_info["end_player"] = self.end_player
         game_info["players_order"] = self.players_order
-        if self.settings["numPlayer"] == 2:
+        if self.settings["num_player"] == 2:
             game_info["id1_cards"] = self.id1_cards
             game_info["id2_cards"] = self.id2_cards
-        elif self.settings["numPlayer"] == 3:
+        elif self.settings["num_player"] == 3:
             game_info["id1_cards"] = self.id1_cards
             game_info["id2_cards"] = self.id2_cards
             game_info["id3_cards"] = self.id3_cards
-        elif self.settings["numPlayer"] == 4:
+        elif self.settings["num_player"] == 4:
             game_info["id1_cards"] = self.id1_cards
             game_info["id2_cards"] = self.id2_cards
             game_info["id3_cards"] = self.id3_cards
@@ -229,11 +232,11 @@ class Board:
 
         #-------------------------------------------------------------
 
-        if self.settings["numPlayer"] == 2:
+        if self.settings["num_player"] == 2:
             template = {"1": "id1", "2": "id2"}
-        elif self.settings["numPlayer"] == 3:
+        elif self.settings["num_player"] == 3:
             template = {"1": "id1", "2": "id2", "3": "id3"}
-        elif self.settings["numPlayer"] == 4:
+        elif self.settings["num_player"] == 4:
             template = {"1": "id1", "2": "id2", "3": "id3", "4": "id4"}
         else:
             print('プレイ人数が2-4人ではありません')
@@ -268,20 +271,20 @@ class Board:
         # players_order = self.players_order.copy()
 
         np.random.shuffle(cards)
-        if self.settings["numPlayer"] == 2:
+        if self.settings["num_player"] == 2:
             order1_cards, order2_cards = cards[0:27], cards[27:53]
             # 並び替えx
             player1_cards = self.card_sort(order1_cards)
             player2_cards = self.card_sort(order2_cards)
             return player1_cards, player2_cards
-        elif self.settings["numPlayer"] == 3:
+        elif self.settings["num_player"] == 3:
             order1_cards, order2_cards, order3_cards = cards[0:18], cards[18:36], cards[36:53]
             # 並び替えx
             player1_cards = self.card_sort(order1_cards)
             player2_cards = self.card_sort(order2_cards)
             player3_cards = self.card_sort(order3_cards)
             return player1_cards, player2_cards, player3_cards
-        elif self.settings["numPlayer"] == 4:
+        elif self.settings["num_player"] == 4:
             order1_cards, order2_cards, order3_cards, order4_cards = cards[0:14], cards[14:27], cards[27:40], cards[40:53]
             # 並び替えx
             player1_cards = self.card_sort(order1_cards)
@@ -339,7 +342,7 @@ class Board:
         for i in self.end_player.values():
             if i != "":
                 end_player_num+=1
-        player_num = self.settings["numPlayer"] - end_player_num
+        player_num = self.settings["num_player"] - end_player_num
         # 次のプレイヤーのインデックスを取得
         next_player_key = ""
         if int(now_player_key) == player_num:
@@ -438,7 +441,7 @@ class Board:
                 for i in self.end_player.values():
                     if i != "":
                         end_player_num+=1
-                player_num = self.settings["numPlayer"] - end_player_num
+                player_num = self.settings["num_player"] - end_player_num
 
                 # 残り一人の場合ゲーム終了
                 if player_num == 1:
@@ -898,12 +901,12 @@ class HumanPlayer:
 # 設定
 if __name__ == "__main__":
     settings = {
-        "numPlayer": 4,
-        "autoSpeed": 0.5,
-        "isBan": True,
-        "isAvility": False,
-        "isStairs": False,
-        "isReturnSpade3": False
+        "num_player": 4,
+        "auto_speed": 0.5,
+        "is_ban": True,
+        "is_avility": False,
+        "is_stairs": False,
+        "is_return_spade3": False
     }
     players = {"id1": RandomPlayer(), "id2": RandomPlayer(), "id3": RandomPlayer(), "id4": RandomPlayer()}
     board = Board(settings=settings)

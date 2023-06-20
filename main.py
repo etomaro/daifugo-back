@@ -45,7 +45,7 @@ class Settings(BaseModel):
 class Play(BaseModel):
     player_id: str
     action_card: list  # これより下はSettings
-    num_player: str
+    num_player: int
     player_type1: str
     player_type2: str
     player_type3: str
@@ -60,6 +60,8 @@ class Play(BaseModel):
     last_card: list
     last_player: str
     count: int
+    turn: int
+    totalAction: int
     revolution: bool
     end_player: dict
     players_order: dict
@@ -80,6 +82,8 @@ def Start(argSettings: Settings):
     # players["id4"] = RandomPalyer() if settings.playerType4 == "auto" else HumanPlayer()
 
     # .dict()とすることでSettings型 -> dict型に変更する
+    print("settings: ", argSettings.dict())
+    print("num_player type: ", type(argSettings.num_player))
     board = Board(settings=argSettings.dict())
 
     next_player_id, next_actionable_cards, game_info, settings = board.game_start()
@@ -126,6 +130,8 @@ def Play(play: Play):
         "last_card": last_card,
         "last_player": play.last_player,
         "count": play.count,
+        "turn": play.turn,
+        "totalAction": play.totalAction,
         "revolution": play.revolution,
         "end_player": play.end_player,
         "players_order": play.players_order,
